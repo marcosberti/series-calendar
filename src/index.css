@@ -1,0 +1,152 @@
+body {
+  font-family: Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  color: white;
+}
+
+#root {
+  background-color: #70abd3;
+  background-image: radial-gradient(#70abd3 0%, #00305b 100%);
+}
+
+/*App*/
+.calendar {
+  min-height: 100vh;
+  margin: 0 auto;
+  padding-top: 50px;
+  width: 90vw;
+}
+
+/*Shared*/
+
+.day,
+.today,
+.no-day,
+.months-bar {
+  background-color: #404040;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+/*Month Bar*/
+.months-bar {
+  list-style: none;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.prev-month,
+.next-month {
+  flex: 0 1 25%;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.prev-month div,
+.next-month div {
+  padding: 0.1rem 0.4rem;
+  display: flex;
+  align-items: center;
+  flex-flow: row nowrap;
+}
+
+.prev-month div {
+  justify-content: flex-start;
+  border-radius: 10px 0 0 10px;
+}
+.next-month div {
+  justify-content: flex-end;
+  border-radius: 0 10px 10px 0;
+}
+
+.prev-month div:hover,
+.next-month div:hover {
+  cursor: pointer;
+  color: white;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.month-navigation-icon {
+  font-size: 1.4rem;
+}
+
+.prev-month div .prev-month-name,
+.next-month div .next-month-name {
+  font-size: 0.9rem;
+}
+
+.prev-month div .prev-month-name {
+  padding-left: 0.3rem;
+}
+
+.next-month div .next-month-name {
+  padding-right: 0.3rem;
+  text-align: end;
+}
+
+.current-month {
+  font-size: 1.5rem;
+  flex: 0 1 50%;
+  text-align: center;
+}
+
+/*Month*/
+.month {
+  margin-top: 1.2rem;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+/*Day*/
+.day,
+.today,
+.no-day {
+  flex: 0 1 13.5%;
+  margin: 0.1rem 0;
+  padding: 1px 1px 6px 1px;
+}
+
+.no-day {
+  visibility: hidden;
+}
+
+.today {
+  background-image: radial-gradient(#ffce30 0%, #e07000 100%);
+}
+.today .day-info {
+  background: #8c3700;
+  border-bottom: 1px solid rgba(178, 34, 34, 0.4);
+}
+
+.day-info {
+  padding: 0.2rem 0 0.05rem 0.5rem;
+  background: rgba(0, 0, 0, 0.28);
+  border-radius: 10px 10px 0 0;
+  color: rgba(255, 255, 255, 0.33);
+  font-family: Oswald, sans-serif;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.day-shows {
+  min-height: 30px;
+}
+
+.day-date {
+  font-size: 1.6rem;
+  letter-spacing: -0.033rem;
+  font-weight: 800;
+}
+
+.day-name {
+  font-weight: 400;
+  width: 45%;
+  font-size: 0.8rem;
+}
