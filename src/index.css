@@ -4,6 +4,7 @@ body {
   padding: 0;
   height: 100%;
   color: white;
+  box-sizing: border-box;
 }
 
 #root {
@@ -15,7 +16,7 @@ body {
 .calendar {
   min-height: 100vh;
   margin: 0 auto;
-  padding-top: 50px;
+  padding-top: 50px; /*TODO: REMOVE*/
   width: 90vw;
 }
 
@@ -23,7 +24,7 @@ body {
 
 .day,
 .today,
-.no-day,
+.empty-box,
 .months-bar {
   background-color: #404040;
   border-radius: 10px;
@@ -79,43 +80,36 @@ body {
 
 .prev-month div .prev-month-name,
 .next-month div .next-month-name {
-  font-size: 0.9rem;
-}
-
-.prev-month div .prev-month-name {
-  padding-left: 0.3rem;
-}
-
-.next-month div .next-month-name {
-  padding-right: 0.3rem;
-  text-align: end;
+  display: none;
 }
 
 .current-month {
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   flex: 0 1 50%;
   text-align: center;
 }
 
+.current-month-episodes {
+  display: none;
+}
+
 /*Month*/
 .month {
-  margin-top: 1.2rem;
+  margin: 1.2rem 0;
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 /*Day*/
-.day,
-.today,
-.no-day {
-  flex: 0 1 13.5%;
+.month > [class*="day"] {
+  flex: 0 1 31%;
   margin: 0.1rem 0;
   padding: 1px 1px 6px 1px;
 }
 
-.no-day {
-  visibility: hidden;
+.empty-box {
+  display: none;
 }
 
 .today {
@@ -148,5 +142,70 @@ body {
 .day-name {
   font-weight: 400;
   width: 45%;
-  font-size: 0.8rem;
+}
+
+.day-name,
+.show {
+  font-size: 0.7rem;
+}
+
+/*Show*/
+.show {
+  padding: 5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.33);
+}
+.show:last-of-type {
+  border-bottom: none;
+}
+
+.show [class*="show"] {
+  display: block;
+}
+
+.show-name {
+  font-weight: bold;
+}
+
+.show [class*="show-episode"] {
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media only screen and (min-width: 768px) {
+  /*MonthsBar*/
+  .prev-month div .prev-month-name,
+  .next-month div .next-month-name {
+    display: inline-block;
+    font-size: 0.9rem;
+  }
+
+  .prev-month div .prev-month-name {
+    padding-left: 0.3rem;
+  }
+
+  .next-month div .next-month-name {
+    padding-right: 0.3rem;
+    text-align: end;
+  }
+
+  /*Month*/
+
+  /*Day*/
+  .month > [class*="day"],
+  .empty-box {
+    flex: 0 1 13.5%;
+  }
+
+  .empty-box {
+    visibility: hidden;
+    display: block;
+    padding: 1px 1px 6px 1px;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  /*MonthsBar*/
+  .current-month-episodes {
+    display: inline-block;
+  }
 }

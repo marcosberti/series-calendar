@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
-import utils from "./utils";
 import Day from "./Day";
 import DateContext from "./DateContext";
+import utils from "./utils";
 
 const Month = props => {
   const [date] = useContext(DateContext);
-  const daysOfMonth = utils.mapDaysOfMonth(date);
+  let daysOfMonth = utils.mapDaysOfMonth(date);
   const today = utils.getTodaysDate();
 
   return (
@@ -21,7 +21,7 @@ const Month = props => {
               ? "today"
               : day.date !== 0
               ? "day"
-              : "no-day"
+              : "empty-box"
           }
         />
       ))}

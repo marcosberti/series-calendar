@@ -1,3 +1,6 @@
+import data from "./test";
+// const cacheName = "shows-cache";
+
 function getDaysOfMonth(month, year) {
   return new Date(year, month + 1, 0).getDate();
 }
@@ -85,10 +88,38 @@ function getTodaysDate() {
   };
 }
 
+async function getShows(date) {
+  // return data;
+  const response = await fetch(`http://api.tvmaze.com/schedule?date=${date}`);
+  if (response.ok) {
+    return await response.json();
+  } else {
+    console.log("error");
+  }
+
+  // const cache = await caches.open(cacheName);
+  // let shows = await cache.match();
+  // console.log(cache);
+}
+
+function formatDate(day) {
+  const date = day.date < 10 ? `0${day.date}` : day.date;
+  const month = formatMonth(day.month);
+  const fullDate = `${day.year}-${month}-${date}`;
+  return fullDate;
+}
+
+function formatMonth(month) {
+  let realMonth = month + 1;
+  return realMonth < 10 ? `0${realMonth}` : realMonth;
+}
+
 const utils = {
   mapDaysOfMonth,
   getMonthName,
-  getTodaysDate
+  getTodaysDate,
+  getShows,
+  formatDate
 };
 
 export default utils;

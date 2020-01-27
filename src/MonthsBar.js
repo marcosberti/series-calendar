@@ -45,7 +45,8 @@ const MonthsBar = () => {
         </div>
       </li>
       <li className="current-month">
-        Episodios de {utils.getMonthName(month)} {year}
+        <span className="current-month-episodes">Episodios de</span>{" "}
+        {utils.getMonthName(month)} {year}
       </li>
       <li className="next-month">
         <div

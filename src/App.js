@@ -13,6 +13,7 @@ const App = () => {
       <main className="calendar">
         <MonthsBar />
         <Month className="month" path="/" />
+        <MonthsBar />
       </main>
       <footer></footer>
     </DateContext.Provider>
