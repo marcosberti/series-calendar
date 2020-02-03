@@ -1,20 +1,33 @@
-import data from "./test";
-// const cacheName = "shows-cache";
+const months = [
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre"
+];
+
+const days = [
+  "Domingo",
+  "Lunes",
+  "Martes",
+  "Miércoles",
+  "Jueves",
+  "Viernes",
+  "Sábado"
+];
 
 function getDaysOfMonth(month, year) {
   return new Date(year, month + 1, 0).getDate();
 }
 
 function getDayOfDate(date, month, year) {
-  const days = [
-    "Domingo",
-    "Lunes",
-    "Martes",
-    "Miércoles",
-    "Jueves",
-    "Viernes",
-    "Sábado"
-  ];
   const day = new Date(year, month, date).getDay();
   return { date, month, year, dayName: days[day], dayNo: day };
 }
@@ -29,12 +42,12 @@ function mapDaysOfMonth(dateObj) {
     daysOfMonth.push(getDayOfDate(i, month, year));
   }
 
-  daysOfMonth = checkEmptyDays(daysOfMonth);
+  daysOfMonth = checkUncompletedWeeks(daysOfMonth);
 
   return daysOfMonth;
 }
 
-function checkEmptyDays(daysOfMonth) {
+function checkUncompletedWeeks(daysOfMonth) {
   const firstDay = daysOfMonth[0];
   const lastDay = daysOfMonth[daysOfMonth.length - 1];
   let fixedDaysOfMonth = daysOfMonth;
@@ -61,21 +74,6 @@ function fillEmptyDays(daysOfMonth, start, end, addBegin) {
 }
 
 function getMonthName(month) {
-  const months = [
-    "Enero",
-    "Febrero",
-    "Marzo",
-    "Abril",
-    "Mayo",
-    "Junio",
-    "Julio",
-    "Agosto",
-    "Septiembre",
-    "Octubre",
-    "Noviembre",
-    "Diciembre"
-  ];
-
   return months[month];
 }
 
@@ -89,17 +87,21 @@ function getTodaysDate() {
 }
 
 async function getShows(date) {
-  // return data;
-  const response = await fetch(`http://api.tvmaze.com/schedule?date=${date}`);
-  if (response.ok) {
-    return await response.json();
+  if (isOnline) {
+    try {
+      const response = await fetch(
+        `http://api.tvmaze.com/schedule?date=${date}`
+      );
+      if (response.ok) {
+        return await response.json();
+      } else {
+      }
+    } catch (err) {
+      return Promise.resolve([]);
+    }
   } else {
-    console.log("error");
+    return Promise.resolve([]);
   }
-
-  // const cache = await caches.open(cacheName);
-  // let shows = await cache.match();
-  // console.log(cache);
 }
 
 function formatDate(day) {
@@ -114,12 +116,90 @@ function formatMonth(month) {
   return realMonth < 10 ? `0${realMonth}` : realMonth;
 }
 
+/* SW */
+
+var isOnline = "onLine" in navigator && navigator.onLine;
+var svcworker;
+var swRegistration;
+
+async function initServiceWorker() {
+  const usingSW = "serviceWorker" in navigator;
+  if (usingSW) {
+    swRegistration = await navigator.serviceWorker.register(
+      "/serviceworker.js",
+      {
+        updateViaCache: "none"
+      }
+    );
+
+    svcworker =
+      swRegistration.installing ||
+      swRegistration.waiting ||
+      swRegistration.active;
+    sendStatusUpdate(svcworker);
+
+    // listen for new service worker to take over
+    navigator.serviceWorker.addEventListener(
+      "controllerchange",
+      async function onController() {
+        svcworker = navigator.serviceWorker.controller;
+        sendStatusUpdate(svcworker);
+      }
+    );
+  }
+
+  // navigator.serviceWorker.addEventListener("message", onSWMessage, false);
+
+  window.addEventListener(
+    "online",
+    function online() {
+      // offlineIcon.classList.add("hidden");
+      isOnline = true;
+      sendStatusUpdate();
+    },
+    false
+  );
+
+  window.addEventListener(
+    "offline",
+    function offline() {
+      // offlineIcon.classList.remove("hidden");
+      isOnline = false;
+      sendStatusUpdate();
+    },
+    false
+  );
+}
+
+function sendStatusUpdate(target) {
+  sendSWMessage({ statusUpdate: { isOnline } }, target);
+}
+
+function sendSWMessage(msg, target) {
+  if (target) {
+    target.postMessage(msg);
+  } else if (svcworker) {
+    svcworker.postMessage(msg);
+  } else if (navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage(msg);
+  }
+}
+
+// function onSWMessage(evt) {
+//   var { data } = evt;
+//   if (data.statusUpdateRequest) {
+//     console.log("Status update requested from service worker, responding...");
+//     sendStatusUpdate(evt.ports && evt.ports[0]);
+//   }
+// }
+
 const utils = {
   mapDaysOfMonth,
   getMonthName,
   getTodaysDate,
   getShows,
-  formatDate
+  formatDate,
+  initServiceWorker
 };
 
 export default utils;

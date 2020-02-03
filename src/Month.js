@@ -3,7 +3,7 @@ import Day from "./Day";
 import DateContext from "./DateContext";
 import utils from "./utils";
 
-const Month = props => {
+const Month = () => {
   const [date] = useContext(DateContext);
   let daysOfMonth = utils.mapDaysOfMonth(date);
   const today = utils.getTodaysDate();

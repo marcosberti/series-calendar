@@ -11,10 +11,16 @@ const Day = props => {
   useEffect(() => {
     if (day.date !== 0) {
       const date = utils.formatDate(day);
-      if (date == "2020-01-26") {
-        utils.getShows(date).then(showsResult => setShows(showsResult));
-        //   //TODO: DELETE TEST
-      }
+      utils
+        .getShows(date)
+        .then(showsResult => setShows(showsResult))
+        .catch(err => {
+          setShows([]);
+          console.error(err, "day err");
+        });
+      // if (date == "2020-02-23") {
+      //   //   //TODO: DELETE TEST
+      // }
     }
   }, [date]);
 
