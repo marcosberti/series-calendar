@@ -87,20 +87,19 @@ function getTodaysDate() {
 }
 
 async function getShows(date) {
-  if (isOnline) {
-    try {
-      const response = await fetch(
-        `http://api.tvmaze.com/schedule?date=${date}`
-      );
-      if (response.ok) {
-        return await response.json();
-      } else {
-      }
-    } catch (err) {
-      return Promise.resolve([]);
+  try {
+    const response = await fetch(`http://api.tvmaze.com/schedule?date=${date}`);
+    if (response.ok) {
+      return await response.json();
+    } else {
+      return new Promise(resolve => {
+        resolve([]);
+      });
     }
-  } else {
-    return Promise.resolve([]);
+  } catch (err) {
+    return new Promise(resolve => {
+      resolve([]);
+    });
   }
 }
 
@@ -148,7 +147,7 @@ async function initServiceWorker() {
     );
   }
 
-  // navigator.serviceWorker.addEventListener("message", onSWMessage, false);
+  navigator.serviceWorker.addEventListener("message", onSWMessage, false);
 
   window.addEventListener(
     "online",
@@ -185,13 +184,12 @@ function sendSWMessage(msg, target) {
   }
 }
 
-// function onSWMessage(evt) {
-//   var { data } = evt;
-//   if (data.statusUpdateRequest) {
-//     console.log("Status update requested from service worker, responding...");
-//     sendStatusUpdate(evt.ports && evt.ports[0]);
-//   }
-// }
+function onSWMessage(evt) {
+  const { data } = evt;
+  if (data.updateLocation) {
+    window.location.reload();
+  }
+}
 
 const utils = {
   mapDaysOfMonth,

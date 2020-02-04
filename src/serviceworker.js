@@ -41,6 +41,7 @@ function onFetch(e) {
 async function handleActivation() {
   await clients.claim();
   console.log(`Service worker (${version}) activated`);
+  sendMessage({ updateLocation: true });
 }
 
 async function router(req) {
@@ -51,7 +52,7 @@ async function router(req) {
   if (url.origin == location.origin || url.origin.includes("api")) {
     res = await cache.match(req.url);
     if (res) {
-      console.log("return from cache", res.clone());
+      console.log("return from cache");
       return res;
     }
 
@@ -67,9 +68,22 @@ async function router(req) {
         return res;
       }
     }
+
+    return new Response("", { ok: false, status: 200, statusText: "No fetch" });
   }
 
   return fetch(req);
+}
+
+async function sendMessage(msg) {
+  var allClients = await clients.matchAll({ includeUncontrolled: true });
+  return Promise.all(
+    allClients.map(function sendTo(client) {
+      var chan = new MessageChannel();
+      chan.port1.onmessage = onMessage;
+      return client.postMessage(msg, [chan.port2]);
+    })
+  );
 }
 
 // async function safeRequest(

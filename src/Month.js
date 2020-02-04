@@ -12,7 +12,7 @@ const Month = () => {
     <div className="month">
       {daysOfMonth.map((day, index) => (
         <Day
-          key={index}
+          key={day.year ? `${day.year}-${day.month}-${day.date}` : index}
           day={day}
           dayClass={
             day.date === today.date &&
