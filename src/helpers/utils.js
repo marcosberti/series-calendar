@@ -1,3 +1,5 @@
+const API_URL = "http://api.tvmaze.com/schedule?date=";
+
 const months = [
   "Enero",
   "Febrero",
@@ -88,7 +90,7 @@ function getTodaysDate() {
 
 async function getShows(date) {
   try {
-    const response = await fetch(`http://api.tvmaze.com/schedule?date=${date}`);
+    const response = await fetch(`${API_URL}${date}`);
     if (response.ok) {
       return await response.json();
     } else {
@@ -115,89 +117,12 @@ function formatMonth(month) {
   return realMonth < 10 ? `0${realMonth}` : realMonth;
 }
 
-/* SW */
-
-var isOnline = "onLine" in navigator && navigator.onLine;
-var svcworker;
-var swRegistration;
-
-async function initServiceWorker() {
-  const usingSW = "serviceWorker" in navigator;
-  if (usingSW) {
-    swRegistration = await navigator.serviceWorker.register(
-      "/serviceworker.js",
-      {
-        updateViaCache: "none"
-      }
-    );
-
-    svcworker =
-      swRegistration.installing ||
-      swRegistration.waiting ||
-      swRegistration.active;
-    sendStatusUpdate(svcworker);
-
-    // listen for new service worker to take over
-    navigator.serviceWorker.addEventListener(
-      "controllerchange",
-      async function onController() {
-        svcworker = navigator.serviceWorker.controller;
-        sendStatusUpdate(svcworker);
-      }
-    );
-  }
-
-  navigator.serviceWorker.addEventListener("message", onSWMessage, false);
-
-  window.addEventListener(
-    "online",
-    function online() {
-      // offlineIcon.classList.add("hidden");
-      isOnline = true;
-      sendStatusUpdate();
-    },
-    false
-  );
-
-  window.addEventListener(
-    "offline",
-    function offline() {
-      // offlineIcon.classList.remove("hidden");
-      isOnline = false;
-      sendStatusUpdate();
-    },
-    false
-  );
-}
-
-function sendStatusUpdate(target) {
-  sendSWMessage({ statusUpdate: { isOnline } }, target);
-}
-
-function sendSWMessage(msg, target) {
-  if (target) {
-    target.postMessage(msg);
-  } else if (svcworker) {
-    svcworker.postMessage(msg);
-  } else if (navigator.serviceWorker.controller) {
-    navigator.serviceWorker.controller.postMessage(msg);
-  }
-}
-
-function onSWMessage(evt) {
-  const { data } = evt;
-  if (data.updateLocation) {
-    window.location.reload();
-  }
-}
-
 const utils = {
   mapDaysOfMonth,
   getMonthName,
   getTodaysDate,
   getShows,
-  formatDate,
-  initServiceWorker
+  formatDate
 };
 
 export default utils;

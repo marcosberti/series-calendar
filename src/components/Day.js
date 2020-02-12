@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import ShowList from "./ShowList";
-import DateContext from "./DateContext";
-import utils from "./utils";
+import DateContext from "../context/DateContext";
+import utils from "../helpers/utils";
 
 const Day = props => {
   const [date] = useContext(DateContext);
@@ -11,10 +11,10 @@ const Day = props => {
   useEffect(() => {
     if (day.date !== 0) {
       const date = utils.formatDate(day);
-      utils.getShows(date).then(showsResult => setShows(showsResult));
-      // if (date == "2020-02-23") {
-      //   //   //TODO: DELETE TEST
-      // }
+      if (date == "2020-02-23") {
+        utils.getShows(date).then(showsResult => setShows(showsResult));
+        //   //TODO: DELETE TEST
+      }
     }
   }, [date]);
 

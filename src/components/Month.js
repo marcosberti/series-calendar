@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import Day from "./Day";
-import DateContext from "./DateContext";
-import utils from "./utils";
+import DateContext from "../context/DateContext";
+import utils from "../helpers/utils";
 
 const Month = () => {
   const [date] = useContext(DateContext);

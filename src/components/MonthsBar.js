@@ -4,8 +4,8 @@ import {
   faAngleDoubleLeft,
   faAngleDoubleRight
 } from "@fortawesome/free-solid-svg-icons";
-import DateContext from "./DateContext";
-import utils from "./utils";
+import DateContext from "../context/DateContext";
+import utils from "../helpers/utils";
 
 const MonthsBar = () => {
   const [date, setDate] = useContext(DateContext);

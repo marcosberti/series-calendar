@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { render } from "react-dom";
 import Month from "./Month";
-import DateContext from "./DateContext";
+import DateContext from "../context/DateContext";
 import MonthsBar from "./MonthsBar";
-import utils from "./utils";
 
 const App = () => {
   const dateHook = useState(new Date());
@@ -21,6 +19,4 @@ const App = () => {
   );
 };
 
-render(<App />, document.getElementById("root"));
-
-utils.initServiceWorker().catch(console.error);
+export default App;
